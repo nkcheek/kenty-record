@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中島健人の記録</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>中島健人の記録</h1>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="検索キーワードを入力...">
+    </div>
+  </header>
+
+  <main>
+    <!-- 日付とタイトルの一覧カード -->
+    <div id="cardContainer" class="card-container"></div>
+  </main>
+
+  <!-- 詳細表示用モーダル（ダイアログ） -->
+  <div id="detailModal" class="modal">
+    <div class="modal-content">
+      <span id="closeBtn" class="close-btn">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
