@@ -34,7 +34,7 @@ const radioData = [
     "title": "中島健人のエヌトワ",
     "audio": "audio/20260912.mp3",
     "transcript": "txt/20260912.txt"
-    "image": "images/20260912.jpg", 
+    "images": "images/20260912.jpg", 
     "links": [
       {
         "title": "公式Xポスト",
