@@ -101,6 +101,32 @@ document.addEventListener('DOMContentLoaded', () => {
     return m ? 'episode ' + m[0] : item.title;
   };
 
+  // ===== 画像・テキストのよみこみ(放送日・回の数字から自動で探す) =====
+  const ymd = (item) => item.date.split('/').map(n => n.padStart(2, '0')).join('');   // 20261003
+  const epNum = (item) => ((item.episode || '').match(/\d+/) || [''])[0];
+  const imageList = (item) => [item.image, `images/${ymd(item)}.jpg`, `images/${ymd(item)}.png`, 'images/hero.jpg'].filter(Boolean);
+  function setImage(img, list) {
+    let i = 0;
+    img.addEventListener('error', () => {
+      i++;
+      if (i < list.length) img.src = list[i]; else img.style.visibility = 'hidden';
+    });
+    img.src = list[0];
+  }
+  const xCache = {};
+  async function loadXText(item) {
+    if (item.id in xCache) return xCache[item.id];
+    const n = epNum(item);
+    for (const u of [item.xtext, `txt/episode${n}.txt`, `txt/${n}.txt`].filter(Boolean)) {
+      try {
+        const res = await fetch(u);
+        if (res.ok) { xCache[item.id] = await res.text(); return xCache[item.id]; }
+      } catch (e) { /* 次の候補へ */ }
+    }
+    xCache[item.id] = null;
+    return null;
+  }
+
   function renderList(items) {
     currentList = items;
     page = 1;
@@ -123,9 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <span class="card-date">${shortDate(item.date)}</span>
         <h2 class="card-title">${epTitle(item)}</h2>
-        <div class="thumb"><img src="${item.image || 'images/hero.jpg'}" alt="" loading="lazy"></div>
+        <div class="thumb"><img alt="" loading="lazy"></div>
       `;
-      card.querySelector('img').addEventListener('error', e => { e.target.style.visibility = 'hidden'; });
+      setImage(card.querySelector('img'), imageList(item));
       card.addEventListener('click', () => {
         selectedId = item.id;
         container.querySelectorAll('.summary-card').forEach(c => c.classList.remove('selected'));
@@ -150,44 +176,62 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // ===== モーダルを開く処理 =====
+  // ===== 詳細(音声・公式X・文字起こし) =====
+  let audio = null;
+  const fmt = (t) => isFinite(t) ? Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0') : '0:00';
+  const ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>';
+  const ICON_PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>';
+
+  function setupPlayer(item) {
+    const btn = modalBody.querySelector('.pl-btn');
+    if (!btn) return;
+    audio = new Audio(item.audio);
+    const bar = modalBody.querySelector('.pl-bar');
+    const fill = modalBody.querySelector('.pl-fill');
+    const time = modalBody.querySelector('.pl-time');
+    btn.addEventListener('click', () => { audio.paused ? audio.play() : audio.pause(); });
+    audio.addEventListener('play', () => { btn.innerHTML = ICON_PAUSE; });
+    audio.addEventListener('pause', () => { btn.innerHTML = ICON_PLAY; });
+    audio.addEventListener('timeupdate', () => {
+      fill.style.width = (audio.duration ? audio.currentTime / audio.duration * 100 : 0) + '%';
+      time.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+    });
+    audio.addEventListener('loadedmetadata', () => { time.textContent = '0:00 / ' + fmt(audio.duration); });
+    bar.addEventListener('click', (e) => {
+      const r = bar.getBoundingClientRect();
+      if (audio.duration) audio.currentTime = audio.duration * Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1);
+    });
+  }
+
   function openModal(item) {
     currentItem = item;
-
-    let linksHtml = '';
-    if (item.links && item.links.length > 0) {
-      linksHtml = `
-        <div class="modal-section">
-          <h3>関連リンク</h3>
-          <ul>
-            ${item.links.map(link => `<li><a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.title}</a></li>`).join('')}
-          </ul>
-        </div>
-      `;
-    }
-
-    let audioHtml = '';
-    if (item.audio) {
-      audioHtml = `
-        <div class="modal-section">
-          <h3>音声</h3>
-          <audio controls src="${item.audio}"></audio>
-        </div>
-      `;
-    }
+    const post = item.links && item.links[0] ? item.links[0].url : '';
+    const xTag = post ? 'a' : 'div';
+    const xAttr = post ? ` href="${post}" target="_blank" rel="noopener noreferrer"` : '';
 
     modalBody.innerHTML = `
-      <div class="modal-header-info">
-        <span class="modal-date">${item.date} ${item.episode || ''}</span>
-        <h2 class="modal-title">${item.title}</h2>
+      <div class="modal-top">
+        <span>${shortDate(item.date).replace(/\//g, '.')}</span><span>episode${epNum(item)}</span>
       </div>
-      ${audioHtml}
-      ${linksHtml}
-      <div class="modal-section">
-        <h3>文字起こし</h3>
-        <div class="transcript-box">${transcriptHtml(item)}</div>
-      </div>
+      ${item.audio ? `<div class="player"><button class="pl-btn" aria-label="再生・一時停止">${ICON_PLAY}</button>
+        <div class="pl-bar"><div class="pl-track"><div class="pl-fill"></div></div></div>
+        <span class="pl-time">0:00 / 0:00</span></div>` : ''}
+      <${xTag} class="x-box"${xAttr}>
+        <div class="x-img"><img alt=""></div>
+        <div class="x-text"></div>
+      </${xTag}>
+      <div class="tr-box transcript-box">${transcriptHtml(item)}</div>
     `;
+
+    setImage(modalBody.querySelector('.x-img img'), imageList(item));
+    loadXText(item).then(text => {
+      if (currentItem !== item) return;
+      const el = modalBody.querySelector('.x-text');
+      if (!el) return;
+      if (text === null) el.remove();
+      else el.innerHTML = escapeHtml(text.replace(/^\uFEFF/, '').trim()).replace(/\r?\n/g, '<br>');
+    });
+    if (item.audio) setupPlayer(item);
 
     // まだ読み込み中だった場合は、読み込み完了後に本文を差し替える
     if (isFilePath(item.transcript) && transcripts[item.id] === undefined) {
@@ -199,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     modal.style.display = 'block';
+    modal.scrollTop = 0;
     document.body.style.overflow = 'hidden'; // 背景スクロール固定
   }
 
@@ -207,6 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
     currentItem = null;
+    if (audio) { audio.pause(); audio = null; }
     // 選択中だけ色を付ける: 閉じたら元の色に戻す
     selectedId = null;
     container.querySelectorAll('.summary-card').forEach(c => c.classList.remove('selected'));

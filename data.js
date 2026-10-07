@@ -14,7 +14,7 @@
 //     "title": "中島健人のエヌトワ",
 //     "audio": "audio/20261010.mp3",
 //     "transcript": "txt/20261010.txt",
-//     "image": "images/20261010.jpg",   ← Xの投稿の画像(省略可。なければ仮の写真)
+//     "image": "images/20261010.jpg",   ← 省略可。省略すると images/放送日.jpg(例: images/20261010.jpg)を使う
 //     "links": [
 //       { "title": "公式Xポスト", "url": "ここにURL" }
 //     ],
@@ -34,7 +34,6 @@ const radioData = [
     "title": "中島健人のエヌトワ",
     "audio": "audio/20260912.mp3",
     "transcript": "txt/20260912.txt",
-    "image": "images/20260912.jpg",
     "links": [
       {
         "title": "公式Xポスト",
@@ -50,7 +49,6 @@ const radioData = [
     "title": "中島健人のエヌトワ",
     "audio": "audio/20260919.mp3",
     "transcript": "txt/20260919.txt",
-    "image": "images/20260919.jpg",
     "links": [
       {
         "title": "公式Xポスト",
@@ -66,7 +64,6 @@ const radioData = [
     "title": "中島健人のエヌトワ",
     "audio": "audio/20260926.mp3",
     "transcript": "txt/20260926.txt",
-    "image": "images/20260926.jpg",
     "links": [
       {
         "title": "公式Xポスト",
@@ -82,7 +79,6 @@ const radioData = [
     "title": "中島健人のエヌトワ",
     "audio": "audio/20261003.mp3",
     "transcript": "txt/20261003.txt",
-    "image": "images/20261003.jpg",
     "links": [
       {
         "title": "公式Xポスト",

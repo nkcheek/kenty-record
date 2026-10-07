@@ -47,14 +47,27 @@ a{color:var(--ink)}
 .pager button:hover,.pager button.current{background:var(--select)}
 .pager button:disabled{opacity:.3;cursor:default;background:transparent}
 
-/* 詳細(モーダル) */
-.modal{display:none;position:fixed;inset:0;z-index:10;overflow:auto;background:rgba(28,43,72,.4)}
-.modal-content{position:relative;background:#fff;max-width:720px;margin:5vh auto;padding:36px 6%}
-.close-btn{position:absolute;right:18px;top:10px;font-size:2rem;cursor:pointer;line-height:1}
-.modal-date{font-size:1.05rem}
-.modal-title{margin:0 0 16px;font-weight:400;font-size:1.7rem}
-.modal-section{margin-top:22px}
-.modal-section h3{margin:0 0 6px;font-weight:400;font-size:1.15rem;border-bottom:1px solid var(--line)}
-.modal-section ul{margin:0;padding-left:1.2em}
-audio{width:100%}
-.transcript-box{max-height:50vh;overflow:auto;padding:12px;background:var(--select);font-size:.95rem}
+/* 詳細(全面表示)。枠線の色 */
+:root{--frame:#a9c8e6}
+.modal{display:none;position:fixed;inset:0;z-index:10;overflow:auto;background:#fff}
+.modal-content{position:relative;max-width:760px;margin:0 auto;padding:34px 6% 64px}
+.close-btn{position:fixed;right:18px;top:12px;font-size:2rem;cursor:pointer;line-height:1;z-index:11}
+.modal-top{display:flex;gap:22px;align-items:baseline;font-family:"Cormorant Garamond",serif;font-weight:400;
+  font-size:clamp(1.3rem,5vw,1.8rem);color:#e8ecef}
+
+/* 細い音声バー */
+.player{display:flex;align-items:center;gap:12px;margin:22px 0 28px}
+.pl-btn{flex:none;width:24px;height:24px;padding:0;border:0;background:none;cursor:pointer;color:var(--ink)}
+.pl-btn svg{width:14px;height:14px;fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.pl-bar{flex:1;height:20px;display:flex;align-items:center;cursor:pointer}
+.pl-track{width:100%;height:2px;background:var(--line)}
+.pl-fill{height:100%;width:0;background:var(--ink)}
+.pl-time{flex:none;font-size:.8rem;min-width:5.5em;text-align:right}
+
+/* 公式X(画像+テキスト)と文字起こしは枠で囲む */
+.x-box{display:flex;align-items:center;gap:6%;padding:7% 6%;margin-bottom:28px;
+  border:1.5px solid var(--frame);color:var(--ink);text-decoration:none;font-size:.9rem;line-height:1.9}
+.x-img{flex:none;width:36%}
+.x-img img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--select)}
+.x-text{flex:1;min-width:0;overflow-wrap:anywhere}
+.tr-box{padding:7% 6%;border:1.5px solid var(--frame);font-size:.95rem;line-height:2;overflow-wrap:anywhere}
