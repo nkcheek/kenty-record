@@ -1,6 +1,6 @@
 // ============================================================
 //  毎週の追加のしかた
-//   1. 文字起こしを「メモ帳」に貼り付け、transcripts フォルダに
+//   1. 文字起こしを「メモ帳」に貼り付け、txt フォルダに
 //      「放送日.txt」（例: 20261010.txt）で保存する（文字コードは UTF-8）
 //   2. 音声ファイルを audio フォルダに入れる（例: 20261010.mp3）
 //   3. 下のリストの最後の } のうしろに「,」を付け、
@@ -13,7 +13,7 @@
 //     "episode": "第80回",
 //     "title": "中島健人のエヌトワ",
 //     "audio": "audio/20261010.mp3",
-//     "transcript": "transcripts/20261010.txt",
+//     "transcript": "txt/20261010.txt",
 //     "links": [
 //       { "title": "公式Xポスト", "url": "ここにURL" }
 //     ],
@@ -32,7 +32,7 @@ const radioData = [
     "episode": "第76回",
     "title": "中島健人のエヌトワ",
     "audio": "audio/20260912.mp3",
-    "transcript": "transcripts/20260912.txt",
+    "transcript": "txt/20260912.txt",
     "links": [
       {
         "title": "公式Xポスト",
@@ -47,7 +47,7 @@ const radioData = [
     "episode": "第77回",
     "title": "中島健人のエヌトワ",
     "audio": "audio/20260919.mp3",
-    "transcript": "transcripts/20260919.txt",
+    "transcript": "txt/20260919.txt",
     "links": [
       {
         "title": "公式Xポスト",
@@ -62,7 +62,7 @@ const radioData = [
     "episode": "第78回",
     "title": "中島健人のエヌトワ",
     "audio": "audio/20260926.mp3",
-    "transcript": "transcripts/20260926.txt",
+    "transcript": "txt/20260926.txt",
     "links": [
       {
         "title": "公式Xポスト",
@@ -77,7 +77,7 @@ const radioData = [
     "episode": "第79回",
     "title": "中島健人のエヌトワ",
     "audio": "audio/20261003.mp3",
-    "transcript": "transcripts/20261003.txt",
+    "transcript": "txt/20261003.txt",
     "links": [
       {
         "title": "公式Xポスト",
