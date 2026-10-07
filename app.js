@@ -86,7 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===== 一覧のレンダリング(1ページ9枠・新しい順) =====
-  const PER_PAGE = 9;
+  // パソコン(広い画面)は6マス、スマホは9マス
+  const mq = window.matchMedia('(min-width: 768px)');
+  const perPage = () => (mq.matches ? 6 : 9);
   const pager = document.getElementById('pager');
   const sortedData = [...radioData].sort((x, y) => y.date.localeCompare(x.date));
   let currentList = sortedData;
@@ -114,8 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const pages = Math.ceil(currentList.length / PER_PAGE);
-    currentList.slice((page - 1) * PER_PAGE, page * PER_PAGE).forEach(item => {
+    const pages = Math.ceil(currentList.length / perPage());
+    currentList.slice((page - 1) * perPage(), page * perPage()).forEach(item => {
       const card = document.createElement('div');
       card.className = 'summary-card' + (item.id === selectedId ? ' selected' : '');
       card.innerHTML = `
@@ -229,6 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   searchInput.addEventListener('input', applySearch);
+  mq.addEventListener('change', () => { page = 1; draw(); });
 
   // 初期表示（文字起こしの読み込みが終わったら、検索中の場合だけ結果を更新する）
   renderList(sortedData);
