@@ -12,38 +12,19 @@ const youtubeData = [
   {
     "date": "2026/10/07",
     "title": "【爆食】アジアツアー台北の夜",
-    "comment": "U:nityとの出会いも美味しいご飯との巡り合わせも良い思い出。
-
-ありがとうU:nity Taipei",
-    "url": "https://youtu.be/B0a4H1DuHLs?si=rANybXcyerMmQWJX"   // ← 例: https://www.youtube.com/watch?v=xxxxxxxxxxx
+    "comment": "U:nityとの出会いも美味しいご飯との巡り合わせも良い思い出。\n\nありがとうU:nity Taipei",
+    "url": "https://youtu.be/B0a4H1DuHLs?si=rANybXcyerMmQWJX"
   },
   {
     "date": "2026/09/15",
     "title": "【襲来⁉︎】漢江バスキング",
-    "comment": "ソウル・漢江に集まってくれたU:nityと過ごした時間
-
-U:nity Seoul ありがとう。
-
-10月3. 4日オリンピックホールで",
+    "comment": "ソウル・漢江に集まってくれたU:nityと過ごした時間\n\nU:nity Seoul ありがとう。\n\n10月3. 4日オリンピックホールで",
     "url": "https://youtu.be/0sXtQ5iq-CM?si=W4eqr4fV_NrEnZTw"
   },
   {
     "date": "2026/09/08",
     "title": "【K-POPの友達】同じ誕生日のボムギュと韓国で遊んだ",
-    "comment": "いやぁ、好きだね。
-ボムギュ。
-なんか似てるのよ。空気感が。
-多分同い年だったら、ライバルだったかも。笑
-それくらいかっこいい。
-それくらい好き。
-この想いはCan't Stopで最初はキュンだよね。
-
-韓国にバスキング行った帰りに
-一緒に遊びました。
-HYBE大きかったです。たのしい
-
-今度は、僕の家にくるみたいです。ボムギュヤ
-",
+    "comment": "いやぁ、好きだね。\nボムギュ。\nなんか似てるのよ。空気感が。\n多分同い年だったら、ライバルだったかも。笑\nそれくらいかっこいい。\nそれくらい好き。\nこの想いはCan't Stopで最初はキュンだよね。\n\n韓国にバスキング行った帰りに\n一緒に遊びました。\nHYBE大きかったです。たのしい\n\n今度は、僕の家にくるみたいです。ボムギュヤ",
     "url": "https://youtu.be/a6cSGxEdewQ?si=qOW3J1MCR4CsXyeO"
   }
 ];
