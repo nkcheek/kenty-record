@@ -56,7 +56,7 @@ a:focus-visible{outline:2px solid var(--navy);outline-offset:4px}
 .hero h1{
   position:absolute;z-index:1;left:2%;bottom:-.1em;margin:0;
   font-family:var(--serif-en);font-weight:600;
-  font-size:clamp(2rem,10.4vw,4.6rem);line-height:1;letter-spacing:.01em;
+  font-size:clamp(2rem,9.6vw,4.6rem);line-height:1;letter-spacing:.01em;
   color:var(--white);white-space:nowrap;
   text-shadow:0 1px 3px rgba(28,43,72,.28),0 3px 18px rgba(28,43,72,.30);
 }
@@ -81,11 +81,11 @@ a:focus-visible{outline:2px solid var(--navy);outline-offset:4px}
 
 /* 6つのリンク */
 .links{
-  display:grid;grid-template-columns:repeat(3,1fr);
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:32px 8%;padding:56px 12% 90px;
 }
 .tile{display:block;text-align:center}
-.box{position:relative;aspect-ratio:1;border-top:2px solid var(--mist);border-right:2px solid var(--mist)}
+.box{display:block;position:relative;aspect-ratio:1;border-top:2px solid var(--mist);border-right:2px solid var(--mist)}
 .box::before{ /* 左の線(下は斜めに切れる) */
   content:"";position:absolute;left:0;top:0;height:68%;
   border-left:2px solid var(--mist)}
@@ -102,7 +102,7 @@ a:focus-visible{outline:2px solid var(--navy);outline-offset:4px}
 .box svg .a{stroke:var(--accent)}
 .box svg .f{fill:var(--accent);stroke:none}
 .label{
-  display:block;margin-top:10px;font-family:var(--script);font-weight:400;
+  display:block;margin-top:10px;white-space:nowrap;font-family:var(--script);font-weight:400;
   font-size:1.7rem;line-height:1.1}
 .tile:hover .box,.tile:hover .box::before,.tile:hover .box::after{border-color:var(--navy)}
 .tile:hover .cut{background:var(--navy)}
