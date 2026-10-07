@@ -205,6 +205,9 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
     currentItem = null;
+    // 選択中だけ色を付ける: 閉じたら元の色に戻す
+    selectedId = null;
+    container.querySelectorAll('.summary-card').forEach(c => c.classList.remove('selected'));
   }
 
   closeBtn.addEventListener('click', closeModal);
