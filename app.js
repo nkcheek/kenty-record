@@ -85,30 +85,67 @@ document.addEventListener('DOMContentLoaded', () => {
     return formatTranscript(text);
   }
 
-  // ===== 一覧のレンダリング =====
-  function renderList(items) {
-    container.innerHTML = '';
+  // ===== 一覧のレンダリング(1ページ9枠・新しい順) =====
+  const PER_PAGE = 9;
+  const pager = document.getElementById('pager');
+  const sortedData = [...radioData].sort((x, y) => y.date.localeCompare(x.date));
+  let currentList = sortedData;
+  let page = 1;
+  let selectedId = null;
 
-    if (items.length === 0) {
+  const shortDate = (d) => d.split('/').map(n => String(parseInt(n, 10))).join('/'); // 2026/10/03 → 2026/10/3
+  const epTitle = (item) => {
+    const m = (item.episode || '').match(/\d+/);
+    return m ? 'episode ' + m[0] : item.title;
+  };
+
+  function renderList(items) {
+    currentList = items;
+    page = 1;
+    draw();
+  }
+
+  function draw() {
+    container.innerHTML = '';
+    pager.innerHTML = '';
+
+    if (currentList.length === 0) {
       container.innerHTML = '<p class="no-result">該当するデータが見つかりませんでした。</p>';
       return;
     }
 
-    items.forEach(item => {
+    const pages = Math.ceil(currentList.length / PER_PAGE);
+    currentList.slice((page - 1) * PER_PAGE, page * PER_PAGE).forEach(item => {
       const card = document.createElement('div');
-      card.className = 'summary-card';
+      card.className = 'summary-card' + (item.id === selectedId ? ' selected' : '');
       card.innerHTML = `
-        <div class="card-meta">
-          <span class="card-date">${item.date}</span>
-          <span class="card-episode">${item.episode || ''}</span>
-        </div>
-        <h2 class="card-title">${item.title}</h2>
+        <span class="card-date">${shortDate(item.date)}</span>
+        <h2 class="card-title">${epTitle(item)}</h2>
+        <div class="thumb"><img src="${item.image || 'image/hero.jpg'}" alt="" loading="lazy"></div>
       `;
-
-      // カードクリックでモーダルを開く
-      card.addEventListener('click', () => openModal(item));
+      card.querySelector('img').addEventListener('error', e => { e.target.style.visibility = 'hidden'; });
+      card.addEventListener('click', () => {
+        selectedId = item.id;
+        container.querySelectorAll('.summary-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        openModal(item);
+      });
       container.appendChild(card);
     });
+
+    if (pages > 1) {
+      const add = (label, target, opts = {}) => {
+        const b = document.createElement('button');
+        b.textContent = label;
+        b.disabled = !!opts.disabled;
+        if (opts.current) b.className = 'current';
+        b.addEventListener('click', () => { page = target; draw(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        pager.appendChild(b);
+      };
+      add('‹', page - 1, { disabled: page === 1 });
+      for (let i = 1; i <= pages; i++) add(String(i), i, { current: i === page });
+      add('›', page + 1, { disabled: page === pages });
+    }
   }
 
   // ===== モーダルを開く処理 =====
@@ -178,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== 検索処理 =====
   function applySearch() {
     const query = searchInput.value.toLowerCase().trim();
-    const filtered = radioData.filter(item => {
+    const filtered = sortedData.filter(item => {
       const text = (getTranscriptText(item) || '').replace(/<\/?i>/g, '').toLowerCase();
       return item.title.toLowerCase().includes(query) ||
              item.date.includes(query) ||
@@ -191,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
   searchInput.addEventListener('input', applySearch);
 
   // 初期表示（文字起こしの読み込みが終わったら、検索中の場合だけ結果を更新する）
-  renderList(radioData);
+  renderList(sortedData);
   loadAll.then(() => {
     if (searchInput.value.trim() !== '') applySearch();
   });

@@ -3,23 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>中島健人の記録</title>
+  <title>中島健人のエヌトワ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Serif+JP:wght@300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>中島健人の記録</h1>
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="検索キーワードを入力...">
-    </div>
+  <header class="site-header">
+    <img class="logo" src="image/logo.png" alt="京成電鉄 presents 中島健人のエヌトワ">
+    <label class="search">
+      <input type="text" id="searchInput" placeholder=" " aria-label="検索">
+      <span class="search-label">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>検索
+      </span>
+    </label>
   </header>
 
   <main>
-    <!-- 日付とタイトルの一覧カード -->
     <div id="cardContainer" class="card-container"></div>
+    <nav id="pager" class="pager" aria-label="ページ"></nav>
   </main>
 
-  <!-- 詳細表示用モーダル（ダイアログ） -->
   <div id="detailModal" class="modal">
     <div class="modal-content">
       <span id="closeBtn" class="close-btn">&times;</span>
