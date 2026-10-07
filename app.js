@@ -5,10 +5,90 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalBody = document.getElementById('modalBody');
   const closeBtn = document.getElementById('closeBtn');
 
-  // 一覧のレンダリング
+  // data.js が読み込めていない（書き方の間違いなど）場合は、画面にお知らせを出す
+  if (typeof radioData === 'undefined' || !Array.isArray(radioData)) {
+    container.innerHTML =
+      '<p class="no-result">データ（data.js）を読み込めませんでした。' +
+      'data.js の書き方（カンマ「,」・引用符「"」・かっこ「{ } [ ]」）を確認してください。</p>';
+    return;
+  }
+
+  // ===== 文字起こしの読み込み =====
+  // item.transcript が「〜.txt」のとき、そのファイルを読み込む
+  // （従来どおり data.js に直接書いた文章も、そのまま表示できる）
+  const transcripts = {}; // id -> 本文（読み込み失敗は null）
+  let currentItem = null;
+
+  function isFilePath(value) {
+    return typeof value === 'string' && /\.txt$/i.test(value.trim()) && !/\n/.test(value);
+  }
+
+  const loadAll = Promise.allSettled(
+    radioData.map(async (item) => {
+      if (!isFilePath(item.transcript)) return;
+      try {
+        const res = await fetch(item.transcript.trim());
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        transcripts[item.id] = await res.text();
+      } catch (e) {
+        transcripts[item.id] = null;
+      }
+    })
+  );
+
+  // 検索や表示で使う本文を返す（まだ読み込み中なら undefined、失敗なら null）
+  function getTranscriptText(item) {
+    if (!item.transcript) return '';
+    if (isFilePath(item.transcript)) return transcripts[item.id];
+    return item.transcript;
+  }
+
+  // ===== 文字起こしを表示用に整える =====
+  function escapeHtml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // 空行で区切った段落ごとに <i> と </i> の数をそろえる（閉じ忘れ・開き忘れの対策）
+  function balanceItalic(block) {
+    const opens = (block.match(/<i>/g) || []).length;
+    const closes = (block.match(/<\/i>/g) || []).length;
+    if (opens > closes) return block + '</i>'.repeat(opens - closes);
+    if (closes > opens) return '<i>'.repeat(closes - opens) + block;
+    return block;
+  }
+
+  function formatTranscript(text) {
+    const cleaned = text.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');
+    // <i> と </i> だけは斜体として使えるようにして、それ以外の < > は文字として表示する
+    const html = escapeHtml(cleaned)
+      .replace(/&lt;i&gt;/g, '<i>')
+      .replace(/&lt;\/i&gt;/g, '</i>');
+    return html
+      .split(/\n[ \t]*\n/)
+      .map(balanceItalic)
+      .join('\n\n')
+      .replace(/\n/g, '<br>');
+  }
+
+  function transcriptHtml(item) {
+    if (!item.transcript) return '文字起こしデータはありません。';
+    const text = getTranscriptText(item);
+    if (text === undefined) return '文字起こしを読み込み中です…';
+    if (text === null) {
+      if (location.protocol === 'file:') {
+        return 'パソコン上の index.html を直接開いているため、文字起こしを読み込めません。' +
+               'GitHub Pages のページか、ローカルサーバー経由で開いてください。';
+      }
+      return '文字起こしファイル（' + escapeHtml(item.transcript) + '）を読み込めませんでした。' +
+             'ファイル名と置き場所を確認してください。';
+    }
+    return formatTranscript(text);
+  }
+
+  // ===== 一覧のレンダリング =====
   function renderList(items) {
     container.innerHTML = '';
-    
+
     if (items.length === 0) {
       container.innerHTML = '<p class="no-result">該当するデータが見つかりませんでした。</p>';
       return;
@@ -24,15 +104,17 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <h2 class="card-title">${item.title}</h2>
       `;
-      
+
       // カードクリックでモーダルを開く
       card.addEventListener('click', () => openModal(item));
       container.appendChild(card);
     });
   }
 
-  // モーダルを開く処理
+  // ===== モーダルを開く処理 =====
   function openModal(item) {
+    currentItem = item;
+
     let linksHtml = '';
     if (item.links && item.links.length > 0) {
       linksHtml = `
@@ -64,18 +146,28 @@ document.addEventListener('DOMContentLoaded', () => {
       ${linksHtml}
       <div class="modal-section">
         <h3>文字起こし</h3>
-        <div class="transcript-box">${item.transcript ? item.transcript.replace(/\n/g, '<br>') : '文字起こしデータはありません。'}</div>
+        <div class="transcript-box">${transcriptHtml(item)}</div>
       </div>
     `;
+
+    // まだ読み込み中だった場合は、読み込み完了後に本文を差し替える
+    if (isFilePath(item.transcript) && transcripts[item.id] === undefined) {
+      loadAll.then(() => {
+        if (currentItem !== item) return;
+        const box = modalBody.querySelector('.transcript-box');
+        if (box) box.innerHTML = transcriptHtml(item);
+      });
+    }
 
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden'; // 背景スクロール固定
   }
 
-  // モーダルを閉じる処理
+  // ===== モーダルを閉じる処理 =====
   function closeModal() {
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
+    currentItem = null;
   }
 
   closeBtn.addEventListener('click', closeModal);
@@ -83,18 +175,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === modal) closeModal();
   });
 
-  // 検索処理
-  searchInput.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase().trim();
+  // ===== 検索処理 =====
+  function applySearch() {
+    const query = searchInput.value.toLowerCase().trim();
     const filtered = radioData.filter(item => {
+      const text = (getTranscriptText(item) || '').replace(/<\/?i>/g, '').toLowerCase();
       return item.title.toLowerCase().includes(query) ||
              item.date.includes(query) ||
              (item.episode && item.episode.includes(query)) ||
-             (item.transcript && item.transcript.toLowerCase().includes(query));
+             text.includes(query);
     });
     renderList(filtered);
-  });
+  }
 
-  // 初期表示
+  searchInput.addEventListener('input', applySearch);
+
+  // 初期表示（文字起こしの読み込みが終わったら、検索中の場合だけ結果を更新する）
   renderList(radioData);
+  loadAll.then(() => {
+    if (searchInput.value.trim() !== '') applySearch();
+  });
 });
