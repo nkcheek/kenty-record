@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <span class="card-date">${shortDate(item.date)}</span>
         <h2 class="card-title">${epTitle(item)}</h2>
-        <div class="thumb"><img src="${item.image || 'image/hero.jpg'}" alt="" loading="lazy"></div>
+        <div class="thumb"><img src="${item.image || 'images/hero.jpg'}" alt="" loading="lazy"></div>
       `;
       card.querySelector('img').addEventListener('error', e => { e.target.style.visibility = 'hidden'; });
       card.addEventListener('click', () => {

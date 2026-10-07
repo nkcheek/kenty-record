@@ -14,7 +14,7 @@
 //     "title": "中島健人のエヌトワ",
 //     "audio": "audio/20261010.mp3",
 //     "transcript": "txt/20261010.txt",
-//     "image": "image/20261010.jpg",   ← Xの投稿の画像(省略可。なければ仮の写真)
+//     "image": "images/20261010.jpg",   ← Xの投稿の画像(省略可。なければ仮の写真)
 //     "links": [
 //       { "title": "公式Xポスト", "url": "ここにURL" }
 //     ],
