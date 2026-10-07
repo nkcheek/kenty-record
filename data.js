@@ -33,7 +33,7 @@ const radioData = [
     "episode": "第76回",
     "title": "中島健人のエヌトワ",
     "audio": "audio/20260912.mp3",
-    "transcript": "txt/20260912.txt"
+    "transcript": "txt/20260912.txt",
     "image": "images/20260912.jpg", 
     "links": [
       {
@@ -49,7 +49,7 @@ const radioData = [
     "episode": "第77回",
     "title": "中島健人のエヌトワ",
     "audio": "audio/20260919.mp3",
-    "transcript": "txt/20260919.txt"
+    "transcript": "txt/20260919.txt",
     "image": "images/20260919.jpg", 
     "links": [
       {
@@ -65,7 +65,7 @@ const radioData = [
     "episode": "第78回",
     "title": "中島健人のエヌトワ",
     "audio": "audio/20260926.mp3",
-    "transcript": "txt/20260926.txt"
+    "transcript": "txt/20260926.txt",
     "image": "images/20260926.jpg", 
     "links": [
       {
@@ -81,7 +81,7 @@ const radioData = [
     "episode": "第79回",
     "title": "中島健人のエヌトワ",
     "audio": "audio/20261003.mp3",
-    "transcript": "txt/20261003.txt"
+    "transcript": "txt/20261003.txt",
     "image": "images/20261003.jpg", 
     "links": [
       {
