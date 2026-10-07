@@ -21,7 +21,8 @@
   --script:"Amsterdam","Allura",cursive;
   --serif-en:"Cormorant Garamond",serif;
   --serif-ja:"Noto Serif JP","Source Han Serif JP","源ノ明朝","Hiragino Mincho ProN","Yu Mincho",serif;
-  --navy:#1d2b4b;
+  --navy:#1c2b48;
+  --accent:#78aee0;
   --mist:#c6d9ea;
   --pill:#c3d3e3;
   --sky1:#d6eafb;
@@ -45,23 +46,19 @@ a:focus-visible{outline:2px solid var(--navy);outline-offset:4px}
 .top{display:flex;justify-content:flex-end;padding:22px 28px 14px}
 .top a{font-family:var(--serif-en);font-weight:600;font-size:1.25rem;letter-spacing:.02em}
 
-/* ヒーロー: 写真は images/hero.jpg に置く(なければ空色のまま) */
+/* ヒーロー: 写真は image/hero.jpg に置く(なければ空色のまま) */
 .hero{
   position:relative;
   aspect-ratio:1080/610;
-  background:url("images/hero.jpg") center 28%/cover no-repeat,
+  background:url("image/hero.jpg") center 28%/cover no-repeat,
              linear-gradient(160deg,var(--sky1),var(--sky2));
-}
-.hero::after{
-  content:"";position:absolute;left:0;right:0;bottom:0;height:22%;
-  background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,.9));
 }
 .hero h1{
   position:absolute;z-index:1;left:2%;bottom:-.1em;margin:0;
   font-family:var(--serif-en);font-weight:600;
   font-size:clamp(2rem,10.4vw,4.6rem);line-height:1;letter-spacing:.01em;
   color:var(--white);white-space:nowrap;
-  text-shadow:0 2px 14px rgba(70,120,170,.35);
+  text-shadow:0 1px 3px rgba(28,43,72,.28),0 3px 18px rgba(28,43,72,.30);
 }
 
 /* News */
@@ -99,14 +96,41 @@ a:focus-visible{outline:2px solid var(--navy);outline-offset:4px}
   position:absolute;left:-7%;top:68%;width:46%;height:2px;
   background:var(--mist);transform:rotate(45deg);transform-origin:left center}
 .box svg{
-  position:absolute;inset:0;margin:auto;width:36%;height:36%;
-  fill:none;stroke:var(--navy);stroke-width:1.5;
+  position:absolute;inset:0;margin:auto;width:50%;height:50%;
+  fill:none;stroke:var(--navy);stroke-width:1.4;
   stroke-linecap:round;stroke-linejoin:round}
+.box svg .a{stroke:var(--accent)}
+.box svg .f{fill:var(--accent);stroke:none}
 .label{
   display:block;margin-top:10px;font-family:var(--script);font-weight:400;
   font-size:1.7rem;line-height:1.1}
 .tile:hover .box,.tile:hover .box::before,.tile:hover .box::after{border-color:var(--navy)}
 .tile:hover .cut{background:var(--navy)}
+
+/* ページを開いたときのふんわりした表示(順番に現れる) */
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes bloom{
+  from{opacity:0;transform:translateY(14px);filter:blur(7px)}
+  to{opacity:1;transform:none;filter:blur(0)}
+}
+.hero{animation:fade 1.6s ease-out both}
+.top{animation:fade 1.2s ease-out .3s both}
+.hero h1{animation:bloom 1.6s cubic-bezier(.2,.7,.2,1) .7s both}
+.news h2{animation:bloom 1.3s cubic-bezier(.2,.7,.2,1) 1.2s both}
+.news li{animation:bloom 1.3s cubic-bezier(.2,.7,.2,1) both}
+.news li:nth-child(1){animation-delay:1.4s}
+.news li:nth-child(2){animation-delay:1.55s}
+.news li:nth-child(3){animation-delay:1.7s}
+.tile{animation:bloom 1.4s cubic-bezier(.2,.7,.2,1) both}
+.tile:nth-child(1){animation-delay:1.9s}
+.tile:nth-child(2){animation-delay:2.02s}
+.tile:nth-child(3){animation-delay:2.14s}
+.tile:nth-child(4){animation-delay:2.26s}
+.tile:nth-child(5){animation-delay:2.38s}
+.tile:nth-child(6){animation-delay:2.5s}
+@media (prefers-reduced-motion:reduce){
+  .hero,.top,.hero h1,.news h2,.news li,.tile{animation:none}
+}
 </style>
 </head>
 <body>
@@ -132,32 +156,32 @@ a:focus-visible{outline:2px solid var(--navy);outline-offset:4px}
   <nav class="links" aria-label="リンク">
     <a class="tile" href="index.html">
       <span class="box"><span class="cut"></span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="1.5"/><circle cx="8" cy="14" r="2.2"/><path d="M13 12.5h5M13 15.5h5M15 8l4-4"/></svg>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="16" width="36" height="24" rx="3.5"/><path d="M30 16l8-9"/><circle cx="17" cy="28" r="6.5"/><circle class="a" cx="17" cy="28" r="2"/><path d="M28 24h8M28 28h8"/><path class="a" d="M28 32h5"/></svg>
       </span><span class="label">radio</span>
     </a>
     <a class="tile" href="#">
       <span class="box"><span class="cut"></span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7c-2-1.5-5-1.8-8-1v12c3-.8 6-.5 8 1 2-1.5 5-1.8 8-1V6c-3-.8-6-.5-8 1zM12 7v12"/></svg>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 14c-4-3-10-3.5-16-2v24c6-1.5 12-1 16 2 4-3 10-3.5 16-2V12c-6-1.5-12-1-16 2zM24 14v24"/><path class="a" d="M13 20.5c3-.6 6-.4 8 .8M27 21.3c2-1.2 5-1.4 8-.8M13 27c3-.6 6-.4 8 .8"/></svg>
       </span><span class="label">blog</span>
     </a>
     <a class="tile" href="#">
       <span class="box"><span class="cut"></span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M10 9l6 3-6 3z"/></svg>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="12" width="36" height="24" rx="7"/><path class="a" d="M20.5 18.5v11l9.5-5.5z"/></svg>
       </span><span class="label">youtube</span>
     </a>
     <a class="tile" href="#">
       <span class="box"><span class="cut"></span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17" cy="7" r=".6"/></svg>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="8" width="32" height="32" rx="9.5"/><circle cx="24" cy="24" r="7.5"/><circle class="f" cx="33.2" cy="14.8" r="1.5"/></svg>
       </span><span class="label">Instagram</span>
     </a>
     <a class="tile" href="#">
       <span class="box"><span class="cut"></span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h4.5l11.5 16h-4.5zM19.5 4l-6.5 7.2M4.5 20l6.5-7.2"/></svg>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M11 10h7.4L37 38h-7.4z"/><path class="a" d="M37 10L26 22.5M11 38l11-12.5"/></svg>
       </span><span class="label">x</span>
     </a>
     <a class="tile" href="#">
       <span class="box"><span class="cut"></span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l9-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="15.5" cy="16" r="2.5"/></svg>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="20" cy="33" r="6"/><path d="M26 33V10"/><path class="a" d="M26 10c.5 5 4.5 8.5 10 9"/></svg>
       </span><span class="label">tiktok</span>
     </a>
   </nav>
