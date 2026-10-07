@@ -19,15 +19,17 @@ html,body{margin:0}
 body{background:#fff;color:var(--ink);font-family:"Cormorant Garamond","Noto Serif JP","Source Han Serif JP","源ノ明朝",serif;font-weight:300;line-height:1.7}
 a{color:inherit;text-decoration:none}
 .page{max-width:760px;margin:0 auto;padding:22px 7% 80px}
-.brand{display:inline-block;font-family:var(--script);font-weight:400;font-size:clamp(2.6rem,10vw,3.8rem);line-height:1.1;margin-bottom:clamp(28px,7vw,52px)}
+.brand{display:inline-block;font-family:var(--script);font-weight:400;font-size:clamp(1.7rem,5.5vw,2.2rem);line-height:1.1;margin-bottom:clamp(24px,6vw,44px)}
 .item{display:flex;align-items:flex-start;gap:5%;margin:0 0 clamp(30px,8vw,56px)}
-.thumb{position:relative;flex:none;width:42%;aspect-ratio:16/9;background:var(--select);cursor:pointer;overflow:hidden;border:0;padding:0;display:block}
-.thumb img,.thumb iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}
+.thumb{position:relative;flex:none;width:42%;aspect-ratio:16/9;background:var(--select);overflow:hidden;display:block}
+a.thumb{cursor:pointer}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}
 .thumb .play{position:absolute;inset:0;margin:auto;width:34px;height:34px;fill:none;stroke:#fff;stroke-width:1.5;stroke-linejoin:round;filter:drop-shadow(0 1px 4px rgba(28,43,72,.5))}
 .info{flex:1;min-width:0}
 .day{font-size:clamp(.85rem,2.6vw,1rem)}
 .title{margin:0;font-weight:300;font-size:clamp(1.05rem,4.2vw,1.5rem);line-height:1.5}
-.comment{margin:4px 0 0;color:var(--soft);font-size:clamp(.78rem,2.4vw,.9rem)}
+.comment{margin:4px 0 0;color:var(--soft);font-size:clamp(.78rem,2.4vw,.9rem);white-space:pre-line;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
 </style>
 </head>
 <body>
@@ -52,23 +54,21 @@ a{color:inherit;text-decoration:none}
     const id = ytId(v.url);
     const row = document.createElement('div');
     row.className = 'item';
+    // サムネイルを押すと、YouTube のアプリ(入っていれば)またはサイトで動画が開く
+    const tag = id ? 'a' : 'div';
+    const attr = id ? ` href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener noreferrer"` : '';
     row.innerHTML = `
-      <button class="thumb" type="button" aria-label="動画を再生">
-        ${id ? `<img alt="" loading="lazy" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg">` : ''}
+      <${tag} class="thumb"${attr} aria-label="YouTubeで動画を見る">
+        ${id ? `<img alt="" loading="lazy" src="https://i.ytimg.com/vi/${id}/maxresdefault.jpg">` : ''}
         <svg class="play" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg>
-      </button>
+      </${tag}>
       <div class="info">
         <div class="day">${esc(day(v.date))}</div>
         <h2 class="title">${esc(v.title)}</h2>
         <p class="comment">${esc(v.comment)}</p>
       </div>`;
-    // サムネイルを押すと、その場で動画が再生される
-    row.querySelector('.thumb').addEventListener('click', (e) => {
-      if (!id) return;
-      const t = e.currentTarget;
-      t.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-      t.style.cursor = 'default';
-    }, { once: true });
+    const img = row.querySelector('img');   // 高画質がない動画は、ふつうの画質に切りかえる
+    if (img) img.addEventListener('error', () => { img.src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`; }, { once: true });
     list.appendChild(row);
   });
 })();
