@@ -181,55 +181,90 @@ document.addEventListener('DOMContentLoaded', () => {
   const fmt = (t) => isFinite(t) ? Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0') : '0:00';
   const ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>';
   const ICON_PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>';
+  // 再生位置の目印になる、白いドラゴン(オリジナルのイラスト)
+  const DRAGON = '<svg class="pl-dragon" viewBox="0 0 72 52" aria-hidden="true"><g fill="#fff" stroke="#1c2b48" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><path d="M30 30C22 22 14 14 8 4c8 1 13 4 17 9 1-5 4-9 8-12 1 6 3 11 6 15z"/><path d="M24 40C14 46 5 41 6 33c3 4 9 5 17 1z"/><path d="M44 36c3-8 2-15 5-20"/><ellipse cx="37" cy="37" rx="14" ry="9"/><path d="M31 44v6h6M44 44v6h6"/><path d="M45 20c0-8 7-12 13-9l8 4c3 2 2 6-1 7l-7 1c-3 5-10 6-13 1z"/><path d="M50 12l-2-8 6 5zM57 11l1-7 4 6z"/></g><circle cx="57" cy="17" r="2.2" fill="#78aee0"/></svg>';
+  const SPEEDS = [1, 1.25, 1.5, 2, 0.75];
 
   function setupPlayer(item) {
     const btn = modalBody.querySelector('.pl-btn');
     if (!btn) return;
     audio = new Audio(item.audio);
-    const bar = modalBody.querySelector('.pl-bar');
+    const bar = modalBody.querySelector('.pl-inner');
     const fill = modalBody.querySelector('.pl-fill');
+    const dragon = modalBody.querySelector('.pl-dragon');
     const time = modalBody.querySelector('.pl-time');
+    const speedBtn = modalBody.querySelector('.pl-speed');
+    let si = 0;
     btn.addEventListener('click', () => { audio.paused ? audio.play() : audio.pause(); });
+    speedBtn.addEventListener('click', () => {
+      si = (si + 1) % SPEEDS.length;
+      audio.playbackRate = SPEEDS[si];
+      speedBtn.textContent = SPEEDS[si] + 'x';
+    });
     audio.addEventListener('play', () => { btn.innerHTML = ICON_PAUSE; });
     audio.addEventListener('pause', () => { btn.innerHTML = ICON_PLAY; });
     audio.addEventListener('timeupdate', () => {
-      fill.style.width = (audio.duration ? audio.currentTime / audio.duration * 100 : 0) + '%';
+      const p = audio.duration ? audio.currentTime / audio.duration * 100 : 0;
+      fill.style.width = p + '%';
+      dragon.style.left = p + '%';
       time.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
     });
     audio.addEventListener('loadedmetadata', () => { time.textContent = '0:00 / ' + fmt(audio.duration); });
-    bar.addEventListener('click', (e) => {
+    bar.parentElement.addEventListener('click', (e) => {
       const r = bar.getBoundingClientRect();
       if (audio.duration) audio.currentTime = audio.duration * Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1);
     });
   }
 
+  // 画像をクリックすると原寸で表示。もう一度クリックすると元にもどる
+  function openLightbox(src) {
+    const lb = document.createElement('div');
+    lb.className = 'lightbox';
+    const im = document.createElement('img');
+    im.src = src;
+    lb.appendChild(im);
+    lb.addEventListener('click', () => lb.remove());
+    document.body.appendChild(lb);
+  }
+
   function openModal(item) {
     currentItem = item;
     const post = item.links && item.links[0] ? item.links[0].url : '';
-    const xTag = post ? 'a' : 'div';
-    const xAttr = post ? ` href="${post}" target="_blank" rel="noopener noreferrer"` : '';
 
     modalBody.innerHTML = `
       <div class="modal-top">
         <span>${shortDate(item.date).replace(/\//g, '.')}</span><span>episode${epNum(item)}</span>
       </div>
       ${item.audio ? `<div class="player"><button class="pl-btn" aria-label="再生・一時停止">${ICON_PLAY}</button>
-        <div class="pl-bar"><div class="pl-track"><div class="pl-fill"></div></div></div>
-        <span class="pl-time">0:00 / 0:00</span></div>` : ''}
-      <${xTag} class="x-box"${xAttr}>
+        <div class="pl-bar"><div class="pl-inner"><div class="pl-track"><div class="pl-fill"></div></div>${DRAGON}</div></div>
+        <span class="pl-time">0:00 / 0:00</span>
+        <button class="pl-speed" aria-label="再生速度">1x</button></div>` : ''}
+      <div class="x-box">
         <div class="x-img"><img alt=""></div>
-        <div class="x-text"></div>
-      </${xTag}>
+        <div class="x-col">
+          <div class="x-body"></div>
+          <div class="x-actions">
+            <button class="x-more" aria-label="全文を読む・閉じる" hidden>…</button>
+            ${post ? `<a class="x-link" href="${post}" target="_blank" rel="noopener noreferrer">X ↗</a>` : ''}
+          </div>
+        </div>
+      </div>
       <div class="tr-box transcript-box">${transcriptHtml(item)}</div>
     `;
 
-    setImage(modalBody.querySelector('.x-img img'), imageList(item));
+    const xImg = modalBody.querySelector('.x-img img');
+    setImage(xImg, imageList(item));
+    xImg.addEventListener('click', () => { if (xImg.currentSrc) openLightbox(xImg.currentSrc); });
+
+    const xBox = modalBody.querySelector('.x-box');
+    const xBody = modalBody.querySelector('.x-body');
+    const more = modalBody.querySelector('.x-more');
+    more.addEventListener('click', () => { xBox.classList.toggle('open'); });
     loadXText(item).then(text => {
-      if (currentItem !== item) return;
-      const el = modalBody.querySelector('.x-text');
-      if (!el) return;
-      if (text === null) el.remove();
-      else el.innerHTML = escapeHtml(text.replace(/^\uFEFF/, '').trim()).replace(/\r?\n/g, '<br>');
+      if (currentItem !== item || !xBody.isConnected) return;
+      if (text === null) { xBody.remove(); return; }
+      xBody.innerHTML = escapeHtml(text.replace(/^\uFEFF/, '').trim()).replace(/\r?\n/g, '<br>');
+      requestAnimationFrame(() => { more.hidden = !(xBody.scrollHeight > xBody.clientHeight + 1); });
     });
     if (item.audio) setupPlayer(item);
 
@@ -253,6 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = 'auto';
     currentItem = null;
     if (audio) { audio.pause(); audio = null; }
+    document.querySelectorAll('.lightbox').forEach(el => el.remove());
     // 選択中だけ色を付ける: 閉じたら元の色に戻す
     selectedId = null;
     container.querySelectorAll('.summary-card').forEach(c => c.classList.remove('selected'));
