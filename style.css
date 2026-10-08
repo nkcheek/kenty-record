@@ -87,6 +87,12 @@ a{color:var(--ink)}
 .x-link{margin-left:auto;font-size:.75rem;opacity:.65;text-decoration:none;color:var(--ink)}
 .tr-box{padding:5%;border:1.5px solid var(--frame);font-size:.92rem;line-height:2;overflow-wrap:anywhere}
 
-/* 画像の原寸表示 */
-.lightbox{position:fixed;inset:0;z-index:30;overflow:auto;background:#fff;display:flex}
-.lightbox img{margin:auto;max-width:none;display:block;cursor:zoom-out}
+/* 画像の拡大表示(YouTubeのコメントと同じ、うしろが透ける背景。画面に収まる大きさ) */
+.lightbox{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:6%;
+  background:rgba(232,236,239,.74);-webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);
+  opacity:0;transition:opacity .45s ease}
+.lightbox.show{opacity:1}
+.lightbox img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;cursor:zoom-out;
+  opacity:0;transform:translateY(14px) scale(.98);
+  transition:transform .65s cubic-bezier(.2,.8,.2,1),opacity .6s ease}
+.lightbox.show img{opacity:1;transform:none}

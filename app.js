@@ -216,15 +216,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 画像をクリックすると原寸で表示。もう一度クリックすると元にもどる
+  // 画像をクリックすると、やわらかく浮かび上がって表示。もう一度クリックすると元にもどる
   function openLightbox(src) {
     const lb = document.createElement('div');
     lb.className = 'lightbox';
     const im = document.createElement('img');
     im.src = src;
     lb.appendChild(im);
-    lb.addEventListener('click', () => lb.remove());
+    lb.addEventListener('click', () => {
+      lb.classList.remove('show');
+      setTimeout(() => lb.remove(), 500);
+    });
     document.body.appendChild(lb);
+    requestAnimationFrame(() => requestAnimationFrame(() => lb.classList.add('show')));
   }
 
   function openModal(item) {
