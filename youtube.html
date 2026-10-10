@@ -34,12 +34,7 @@ a.thumb{cursor:pointer}
 .comment{margin:4px 0 0;color:var(--soft);font-size:clamp(.78rem,2.4vw,.9rem);white-space:pre-line;
   line-height:1.7;max-height:calc(3 * 1.7em);overflow:hidden}
 .more{padding:0 4px;border:0;background:none;font:inherit;font-size:1.2rem;line-height:1;color:var(--ink);cursor:pointer}
-
-/* 「もっと見る」ボタンのスタイル */
-.load-more-container{text-align:center;margin-top:20px}
-.btn-load-more{padding:10px 24px;border:1px solid var(--soft);background:none;color:var(--ink);font-family:inherit;font-size:0.95rem;cursor:pointer;border-radius:4px;transition:all .3s}
-.btn-load-more:hover{background:var(--select)}
-
+/* 「…」を押すと、うしろが透けた画面でコメントの全文がやわらかく開く */
 .ov{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:8%;
   background:rgba(232,236,239,.74);-webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);
   opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
@@ -50,138 +45,66 @@ a.thumb{cursor:pointer}
 .ov-day{font-size:1rem}
 .ov-title{margin:2px 0 14px;font-weight:300;font-size:1.25rem;line-height:1.5}
 .ov-comment{margin:0;white-space:pre-line;font-size:1rem;line-height:2}
-.loading{color:var(--soft);font-size:1rem}
 </style>
 </head>
 <body>
 <div class="page">
-  <a class="brand" id="brand" href="https://www.youtube.com/@n_kento_official/videos" target="_blank" rel="noopener noreferrer">YouTube</a>
-  <div id="list"><p class="loading">動画データを読み込み中...</p></div>
-  <div class="load-more-container">
-    <button id="loadMoreBtn" class="btn-load-more" type="button" style="display:none;">もっと見る</button>
-  </div>
+  <a class="brand" id="brand" href="#" target="_blank" rel="noopener noreferrer">YouTube</a>
+  <div id="list"></div>
 </div>
-
+<script src="youtube-data.js"></script>
 <script>
-(async function () {
-  const API_KEY = "AIzaSyAKJFC50YxR2Gg3hTcGtBt38oY8Til_Zuw"; // 取得したAPIキーを入力
-  const HANDLE = "n_kento_official";
-  const MAX_RESULTS = 30; // 1回で読み込む件数
-
-  let nextPageToken = ""; // 次のページの目印
-  let uploadsPlaylistId = "";
-
+(function () {
+  if (typeof youtubeData === 'undefined') {
+    document.getElementById('list').textContent = 'youtube-data.js を読み込めませんでした。書き方を確認してください。';
+    return;
+  }
+  document.getElementById('brand').href = youtubeChannel;
+  const ytId = (url) => { const m = (url || '').match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([\w-]{11})/); return m ? m[1] : ''; };
   const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const formatDate = (isoStr) => {
-    const d = new Date(isoStr);
-    return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`;
-  };
+  const day = (d) => d.split('/').map(n => parseInt(n, 10)).join('.');   // 2026/10/03 → 2026.10.3
 
   const list = document.getElementById('list');
-  const loadMoreBtn = document.getElementById('loadMoreBtn');
-
-  // モーダル
   const ov = document.createElement('div');
   ov.className = 'ov';
   ov.innerHTML = '<div class="ov-body"><div class="ov-day"></div><h2 class="ov-title"></h2><p class="ov-comment"></p></div>';
   document.body.appendChild(ov);
-
   function openOv(v) {
-    ov.querySelector('.ov-day').textContent = formatDate(v.date);
+    ov.querySelector('.ov-day').textContent = day(v.date);
     ov.querySelector('.ov-title').textContent = v.title;
     ov.querySelector('.ov-comment').textContent = v.comment;
     ov.classList.add('show');
     document.body.style.overflow = 'hidden';
   }
   ov.addEventListener('click', () => { ov.classList.remove('show'); document.body.style.overflow = ''; });
-
-  // 動画を読み込んで追加表示する関数
-  async function fetchVideos() {
-    try {
-      loadMoreBtn.disabled = true;
-      loadMoreBtn.textContent = "読み込み中...";
-
-      // 最初だけ再生リストIDを取得
-      if (!uploadsPlaylistId) {
-        const chRes = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle=${HANDLE}&key=${API_KEY}`);
-        const chData = await chRes.json();
-        if (!chData.items || chData.items.length === 0) throw new Error("チャンネルが見つかりません");
-        uploadsPlaylistId = chData.items[0].contentDetails.relatedPlaylists.uploads;
-        list.innerHTML = ""; // 初期メッセージクリア
-      }
-
-      // 動画リストの取得（nextPageTokenがあれば過去動画の続きを取る）
-      let url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=${MAX_RESULTS}&key=${API_KEY}`;
-      if (nextPageToken) url += `&pageToken=${nextPageToken}`;
-
-      const playlistRes = await fetch(url);
-      const playlistData = await playlistRes.json();
-
-      if (!playlistData.items || playlistData.items.length === 0) {
-        if (!nextPageToken) list.innerHTML = "<p>動画が見つかりませんでした。</p>";
-        loadMoreBtn.style.display = "none";
-        return;
-      }
-
-      // 次の通信用のトークンを記憶
-      nextPageToken = playlistData.nextPageToken || "";
-
-      // 描画
-      playlistData.items.forEach(item => {
-        const snippet = item.snippet;
-        const id = snippet.resourceId.videoId;
-        const v = { date: snippet.publishedAt, title: snippet.title, comment: snippet.description };
-
-        const row = document.createElement('div');
-        row.className = 'item';
-        const tag = id ? 'a' : 'div';
-        const attr = id ? ` href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener noreferrer"` : '';
-
-        row.innerHTML = `
-          <${tag} class="thumb"${attr} aria-label="YouTubeで動画を見る">
-            ${id ? `<img alt="" loading="lazy" src="https://i.ytimg.com/vi/${id}/maxresdefault.jpg">` : ''}
-            <svg class="play" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg>
-          </${tag}>
-          <div class="info">
-            <div class="day">${esc(formatDate(v.date))}</div>
-            <h2 class="title">${esc(v.title)}</h2>
-            <p class="comment">${esc(v.comment)}</p>
-            <button class="more" type="button" aria-label="コメントの全文を読む" hidden>…</button>
-          </div>`;
-
-        const img = row.querySelector('img');
-        if (img) img.addEventListener('error', () => { img.src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`; }, { once: true });
-
-        list.appendChild(row);
-
-        const cm = row.querySelector('.comment'), more = row.querySelector('.more');
-        const check = () => { more.hidden = !(cm.scrollHeight > cm.clientHeight + 1); };
-        requestAnimationFrame(check);
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
-        more.addEventListener('click', () => openOv(v));
-      });
-
-      // まだ続きの動画があれば「もっと見る」ボタンを出す
-      if (nextPageToken) {
-        loadMoreBtn.style.display = "inline-block";
-        loadMoreBtn.disabled = false;
-        loadMoreBtn.textContent = "もっと見る";
-      } else {
-        loadMoreBtn.style.display = "none"; // 最後の動画までいったらボタンを消す
-      }
-
-    } catch (err) {
-      console.error(err);
-      list.innerHTML = `<p class="loading">動画の読み込みに失敗しました。</p>`;
-      loadMoreBtn.style.display = "none";
-    }
-  }
-
-  // 最初の一回目を実行
-  fetchVideos();
-
-  // 「もっと見る」ボタンを押したときに追加で読み込む
-  loadMoreBtn.addEventListener('click', fetchVideos);
+  youtubeData.forEach(v => {
+    const id = ytId(v.url);
+    const row = document.createElement('div');
+    row.className = 'item';
+    // サムネイルを押すと、YouTube のアプリ(入っていれば)またはサイトで動画が開く
+    const tag = id ? 'a' : 'div';
+    const attr = id ? ` href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener noreferrer"` : '';
+    row.innerHTML = `
+      <${tag} class="thumb"${attr} aria-label="YouTubeで動画を見る">
+        ${id ? `<img alt="" loading="lazy" src="https://i.ytimg.com/vi/${id}/maxresdefault.jpg">` : ''}
+        <svg class="play" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg>
+      </${tag}>
+      <div class="info">
+        <div class="day">${esc(day(v.date))}</div>
+        <h2 class="title">${esc(v.title)}</h2>
+        <p class="comment">${esc(v.comment)}</p>
+        <button class="more" type="button" aria-label="コメントの全文を読む" hidden>…</button>
+      </div>`;
+    const img = row.querySelector('img');   // 高画質がない動画は、ふつうの画質に切りかえる
+    if (img) img.addEventListener('error', () => { img.src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`; }, { once: true });
+    list.appendChild(row);
+    // コメントが入りきらないときだけ「…」を出す
+    const cm = row.querySelector('.comment'), more = row.querySelector('.more');
+    const check = () => { more.hidden = !(cm.scrollHeight > cm.clientHeight + 1); };
+    requestAnimationFrame(check);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
+    more.addEventListener('click', () => openOv(v));
+  });
 })();
 </script>
 </body>
