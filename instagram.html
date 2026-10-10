@@ -19,6 +19,8 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .page{max-width:560px;margin:0 auto;padding:22px 5% 80px}
 .brand{display:inline-block;font-family:var(--script);font-weight:400;font-size:clamp(1.25rem,5.4vw,1.8rem);line-height:1.2;text-decoration:none;color:inherit}
 
+/* タイトルは、閲覧済みリンクの色や下線がつかないように、色と下線をはっきり指定する */
+.brand,.brand:link,.brand:visited,.brand:hover,.brand:active{color:var(--ink)!important;text-decoration:none!important;-webkit-text-decoration:none!important}
 /* タブ(下の線がすべるように動く) */
 .tabs{position:relative;display:flex;margin:14px 0 26px;border-bottom:1px solid var(--line)}
 .tabs button{flex:1;padding:8px 0 10px;font-size:1.05rem;letter-spacing:.04em;opacity:.55;transition:opacity .4s}
@@ -72,6 +74,22 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .ov .m{max-width:100%;max-height:78vh;opacity:0;transform:translateY(14px) scale(.98);transition:transform .65s cubic-bezier(.2,.8,.2,1),opacity .6s ease;background:var(--tile)}
 .ov.show .m{opacity:1;transform:none}
 .ov a{font-size:.9rem;color:var(--ink)}
+/* ストーリー表示(うしろが透ける背景) */
+.sv{position:fixed;inset:0;z-index:25;display:flex;flex-direction:column;padding:14px 5% 4%;cursor:pointer;
+  background:rgba(232,236,239,.74);-webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);
+  opacity:0;visibility:hidden;transition:opacity .5s ease,visibility 0s .5s}
+.sv.show{opacity:1;visibility:visible;transition:opacity .5s ease}
+.sv-bars{display:flex;gap:4px}
+.sv-bars i{flex:1;height:2px;background:rgba(28,43,72,.2);transition:background .3s}
+.sv-bars i.on{background:var(--ink)}
+.sv-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.sv-date{font-size:1.15rem}
+.sv-x{font-size:2rem;line-height:1;padding:0 4px}
+.sv-stage{position:relative;flex:1;min-height:0;margin-top:8px;opacity:0;transform:translateY(14px) scale(.98);
+  transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .6s ease}
+.sv.show .sv-stage{opacity:1;transform:none}
+.sv-stage img,.sv-stage video,.sv-ph{position:absolute;inset:0;margin:auto;max-width:100%;max-height:100%;animation:fade .4s ease both}
+.sv-ph{width:min(56vw,320px);aspect-ratio:9/16;background:var(--tile)}
 @media (prefers-reduced-motion:reduce){.panel.in,.th>*{animation:none}}
 </style>
 </head>
@@ -87,6 +105,11 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   <section class="panel" id="p-reels" hidden></section>
 </div>
 <div class="ov" id="ov"></div>
+<div class="sv" id="sv">
+  <div class="sv-top"><div class="sv-bars"></div>
+    <div class="sv-meta"><span class="sv-date"></span><button class="sv-x" aria-label="閉じる">×</button></div></div>
+  <div class="sv-stage"></div>
+</div>
 <script src="instagram-data.js"></script>
 <script>
 (function () {
@@ -106,20 +129,54 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
       : `<img src="${m.src}" alt="" loading="lazy">`;
   };
 
+  // ----- ストーリー表示: 画面をタップ(クリック)すると、次の画像・動画へ -----
+  const sv = document.getElementById('sv');
+  const stage = sv.querySelector('.sv-stage'), bars = sv.querySelector('.sv-bars'), sdate = sv.querySelector('.sv-date');
+  let cur = null, ci = 0;
+  function showStory() {
+    const m = cur.media[ci];
+    [...bars.children].forEach((b, i) => b.classList.toggle('on', i <= ci));
+    stage.innerHTML = '';
+    if (!m.src) { stage.innerHTML = '<div class="sv-ph"></div>'; return; }
+    if (m.type === 'video') {
+      const v = document.createElement('video');
+      v.src = m.src; v.playsInline = true; v.loop = true; v.autoplay = true;
+      stage.appendChild(v);
+      const p = v.play(); if (p && p.catch) p.catch(() => { v.muted = true; const q = v.play(); if (q && q.catch) q.catch(() => {}); });   // 音つきで再生できないときは、音なしで再生
+    } else {
+      const im = document.createElement('img'); im.src = m.src; im.alt = ''; stage.appendChild(im);
+    }
+  }
+  function openStory(day) {
+    cur = day; ci = 0;
+    sdate.textContent = dl(day.date);
+    bars.innerHTML = day.media.map(() => '<i></i>').join('');
+    showStory();
+    sv.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeStory() {
+    sv.classList.remove('show'); document.body.style.overflow = '';
+    const v = stage.querySelector('video'); if (v) v.pause();
+    setTimeout(() => { if (!sv.classList.contains('show')) stage.innerHTML = ''; }, 500);
+  }
+  function nextStory() { if (ci < cur.media.length - 1) { ci++; showStory(); } else closeStory(); }
+  sv.addEventListener('click', (e) => { if (e.target.closest('.sv-x')) closeStory(); else nextStory(); });
+  document.addEventListener('keydown', (e) => {
+    if (!sv.classList.contains('show')) return;
+    if (e.key === 'Escape') closeStory(); else if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextStory(); }
+  });
+
   // ----- Storys(タイムライン) -----
   function timeline(days) {
     const tl = document.createElement('div'); tl.className = 'tl';
     days.forEach((day, i) => {
       const row = document.createElement('div'); row.className = 'day ' + (i % 2 ? 'r' : 'l');
-      const n = day.media.length; let idx = 0;
+      const n = day.media.length;
       row.innerHTML = '<div class="th"></div><div class="dt">' + dl(day.date) + '</div>';
       const th = row.querySelector('.th');
-      const draw = () => { th.innerHTML = media(day.media[idx]) + (n > 1 ? `<span class="cnt">${idx + 1}/${n}</span>` : ''); };
-      draw();
-      th.addEventListener('click', () => {
-        if (n > 1) { idx = (idx + 1) % n; draw(); }                       // 同じ日に複数あるときは、タップで切りかわる
-        else { const v = th.querySelector('video'); if (v) { v.paused ? v.play() : v.pause(); } }
-      });
+      th.innerHTML = media(day.media[0]) + (n > 1 ? `<span class="cnt">+${n - 1}</span>` : '');
+      th.addEventListener('click', () => openStory(day));
       tl.appendChild(row);
     });
     return tl;
@@ -129,7 +186,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   if (!stories.length) ps.innerHTML = '<p class="none">まだありません</p>';
   else {
     const cur = ml(stories[0].date);
-    ps.innerHTML = `<h2 class="sh">STORY // ${cur}</h2>`;
+    ps.innerHTML = `<h2 class="sh">${cur}</h2>`;
     ps.appendChild(timeline(stories.filter(s => ml(s.date) === cur)));
     const months = [...new Set(stories.map(s => ml(s.date)))].filter(m => m !== cur);
     const arc = document.createElement('div'); arc.className = 'arc';
