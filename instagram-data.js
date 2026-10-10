@@ -12,12 +12,24 @@ const instagramAccount = "https://www.instagram.com/";   // ← Instagramアカ�
 
 const instagramData = {
   stories: [
-    { "date": "2026/10/09", "media": [ { "type": "image", "src": "" }, { "type": "video", "src": "" } ] },
-    { "date": "2026/10/08", "media": [ { "type": "video", "src": "" } ] },
-    { "date": "2026/10/07", "media": [ { "type": "image", "src": "" } ] },
-    { "date": "2026/09/28", "media": [ { "type": "image", "src": "" } ] },
-    { "date": "2026/09/12", "media": [ { "type": "image", "src": "" }, { "type": "image", "src": "" } ] },
-    { "date": "2026/08/20", "media": [ { "type": "video", "src": "" } ] }
+    { "date": "2026/10/10", "media": [
+        { "type": "video", "src": "images/story/20261010-1.mp4" }
+    ] },
+    { "date": "2026/10/09", "media": [
+        { "type": "image", "src": "images/story/20261009-1.jpg" },
+        { "type": "video", "src": "images/story/20261009-2.mp4" },
+        { "type": "video", "src": "images/story/20261009-3.mp4" },
+        { "type": "video", "src": "images/story/20261009-4.mp4" },
+        { "type": "video", "src": "images/story/20261009-5.mp4" },
+        { "type": "image", "src": "images/story/20261009-6.jpg" },
+        { "type": "video", "src": "images/story/20261009-7.mp4" }
+    ] },
+    { "date": "2026/10/08", "media": [
+        { "type": "video", "src": "images/story/2026108-1.mp4" },
+        { "type": "video", "src": "images/story/20261008-2.mp4" },
+        { "type": "video", "src": "images/story/20261008-3.mp4" },
+        { "type": "video", "src": "images/story/20261008-4.mp4" }
+    ] }
   ],
   feeds: [
     { "date": "2026/10/05", "type": "image", "src": "", "url": "" },
