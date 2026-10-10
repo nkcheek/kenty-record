@@ -86,5 +86,17 @@ const radioData = [
       }
     ],
     "terms": []
-  }
+  }{
+//     "id": "ep80",
+//     "date": "2026/10/10",
+//     "episode": "第80回",
+//     "title": "中島健人のエヌトワ",
+//     "audio": "audio/20261010.mp3",
+//     "transcript": "txt/20261010.txt",
+//     "image": "images/20261010.jpg",   ← 省略可。省略すると images/放送日.jpg(例: images/20261010.jpg)を使う
+//     "links": [
+//       { "title": "公式Xポスト", "url": "https://x.com/ntowa78MHz/status/2108851928197423557?s=20" }
+//     ],
+//     "terms": []
+//   }
 ];
