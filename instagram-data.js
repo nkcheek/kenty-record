@@ -14,15 +14,16 @@ const instagramData = {
   stories: [
     { "date": "2026/10/10", "media": [
         { "type": "video", "src": "images/story/20261010-1.mp4" }
+    
     ] },
     { "date": "2026/10/09", "media": [
-        { "type": "image", "src": "images/story/20261009-1.jpg" },
-        { "type": "video", "src": "images/story/20261009-2.mp4" },
+        { "type": "image", "src": "images/story/20261009-1.mp4" },
+        { "type": "video", "src": "images/story/20261009-2.jpg" },
         { "type": "video", "src": "images/story/20261009-3.mp4" },
         { "type": "video", "src": "images/story/20261009-4.mp4" },
         { "type": "video", "src": "images/story/20261009-5.mp4" },
-        { "type": "image", "src": "images/story/20261009-6.jpg" },
-        { "type": "video", "src": "images/story/20261009-7.mp4" }
+        { "type": "image", "src": "images/story/20261009-6.mp4" },
+        { "type": "video", "src": "images/story/20261009-7.jpg" }
     ] },
     { "date": "2026/10/08", "media": [
         { "type": "video", "src": "images/story/2026108-1.mp4" },
