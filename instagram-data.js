@@ -9,6 +9,40 @@ const instagramAccount = "https://www.instagram.com/";   // ← Instagramアカ�
 const instagramData = {
   "stories": [
     {
+      "date": "2026/10/13",
+      "media": [
+        {
+          "type": "video",
+          "src": "images/story/20261013-1.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261013-2.mp4"
+        }
+      ]
+    },
+    {
+      "date": "2026/10/11",
+      "media": [
+        {
+          "type": "video",
+          "src": "images/story/20261011-1.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261011-2.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261011-3.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261011-4.mp4"
+        }
+      ]
+    },
+    {
       "date": "2026/10/10",
       "media": [
         {
@@ -26,6 +60,10 @@ const instagramData = {
         {
           "type": "video",
           "src": "images/story/20261010-4.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261010-5.mp4"
         }
       ]
     },
@@ -65,10 +103,6 @@ const instagramData = {
     {
       "date": "2026/10/08",
       "media": [
-        {
-          "type": "video",
-          "src": "images/story/20261008-1.mp4"
-        },
         {
           "type": "video",
           "src": "images/story/20261008-2.mp4"
