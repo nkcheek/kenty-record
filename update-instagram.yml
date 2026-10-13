@@ -1,0 +1,26 @@
+name: update instagram data
+
+on:
+  push:
+    paths:
+      - 'images/story/**'
+      - 'images/feed/**'
+      - 'images/reel/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: instagram-data.js を作り直す
+        run: python3 scripts/make_instagram_data.py
+      - name: 変わっていたら保存する
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add instagram-data.js
+          git diff --cached --quiet || (git commit -m "Update instagram-data.js" && git push)
