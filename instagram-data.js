@@ -9,6 +9,15 @@ const instagramAccount = "https://www.instagram.com/";   // ← Instagramアカ�
 const instagramData = {
   "stories": [
     {
+      "date": "2026/10/14",
+      "media": [
+        {
+          "type": "video",
+          "src": "images/story/20261014.mp4"
+        }
+      ]
+    },
+    {
       "date": "2026/10/13",
       "media": [
         {
