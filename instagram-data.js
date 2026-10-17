@@ -4,10 +4,19 @@
 //  ・手で直しても、次の自動更新で上書きされます
 //    (直してよいのは、下の instagramAccount のURLと、feeds / reels の url だけ)
 // ============================================================
-const instagramAccount = "https://www.instagram.com/";   // ← InstagramアカウントのURL
+const instagramAccount = "https://www.instagram.com/kento.nakajima_313/";   // ← InstagramアカウントのURL
 
 const instagramData = {
   "stories": [
+    {
+      "date": "2026/10/14",
+      "media": [
+        {
+          "type": "video",
+          "src": "images/story/20261014.mp4"
+        }
+      ]
+    },
     {
       "date": "2026/10/13",
       "media": [
