@@ -62,12 +62,17 @@ a:focus-visible{outline:2px solid var(--navy);outline-offset:4px}
 }
 
 /* News */
-.news{padding:44px 14% 0}
+.news{padding:44px 10% 0}
 .news h2{
   margin:0 0 6px;font-family:var(--script);font-weight:400;
   font-size:3.2rem;line-height:1;
 }
 .news ul{list-style:none;margin:0;padding:0}
+.news .text{min-width:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;line-height:1.6}
+.news .text a{color:inherit;text-decoration:none}
+.news .text a:hover{opacity:.65}
+.news-more{display:block;width:fit-content;margin:12px 0 0 auto;padding:0;border:0;background:none;color:var(--navy);font-family:var(--serif-en);font-size:1.05rem;letter-spacing:.06em;cursor:pointer;animation:fade 1.2s ease 2.2s both}
+.news-more{text-decoration:none}
 .news li{display:flex;align-items:center;gap:12px;margin-top:8px}
 .news time{
   flex:none;background:var(--pill);border-radius:6px;
@@ -121,6 +126,7 @@ a:focus-visible{outline:2px solid var(--navy);outline-offset:4px}
 .news li:nth-child(1){animation-delay:1.4s}
 .news li:nth-child(2){animation-delay:1.55s}
 .news li:nth-child(3){animation-delay:1.7s}
+.news li:nth-child(n+4){animation-delay:1.85s}
 .tile{animation:bloom 1.4s cubic-bezier(.2,.7,.2,1) both}
 .tile:nth-child(1){animation-delay:1.9s}
 .tile:nth-child(2){animation-delay:2.02s}
@@ -145,12 +151,24 @@ a:focus-visible{outline:2px solid var(--navy);outline-offset:4px}
   <!-- ニュース: 1行ぶんが <li>…</li>。増やすときは行ごとコピーして書き換える -->
   <section class="news">
     <h2>News</h2>
-    <ul>
-      <li><time>yy/mm/dd</time><span class="text">「番組名」　出演</span></li>
-      <li><time>yy/mm/dd</time><span class="text">「雑誌名」　掲載</span></li>
-      <li><time>yy/mm/dd</time><span class="text">YouTube更新</span></li>
-    </ul>
+    <ul id="newsList"></ul>
+    <a class="news-more" href="news.html">More</a>
   </section>
+  <script src="news-data.js"></script>
+  <script>
+  (function () {
+    if (typeof newsData === 'undefined') return;
+    const SHOW = 3;                                                    // トップに出す件数(最大3件)
+    const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const key = (d) => d.split('/').map(Number).reduce((a, n) => a * 100 + n, 0);
+    const yymmdd = (d) => { const p = d.split('/'); return String(p[0]).slice(-2) + '/' + p[1].padStart(2, '0') + '/' + p[2].padStart(2, '0'); };
+    const items = [...newsData].sort((a, b) => key(b.date) - key(a.date)).slice(0, SHOW);
+    document.getElementById('newsList').innerHTML = items.map((n) => {
+      const title = n.url ? `<a href="${esc(n.url)}" target="_blank" rel="noopener noreferrer">${esc(n.title)}</a>` : esc(n.title);
+      return `<li><time>${yymmdd(n.date)}</time><span class="text">${title}</span></li>`;
+    }).join('');
+  })();
+  </script>
 
   <!-- リンク: href="#" の「#」を、行き先のURLに書き換える -->
   <nav class="links" aria-label="リンク">
