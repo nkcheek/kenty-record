@@ -23,13 +23,35 @@ const idOf = (url) => ((url || '').match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([\
 const known = new Set(old.map((v) => idOf(v.url)).filter(Boolean));
 
 // ----- YouTube の更新情報を読む -----
-let xml;
-if (process.env.FEED_FILE) {
-  xml = fs.readFileSync(process.env.FEED_FILE, 'utf8');          // 試験用
-} else {
-  const res = await fetch(FEED_URL, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; kenty-record-updater)' } });
-  if (!res.ok) { console.error('YouTube の更新情報を取れませんでした: HTTP ' + res.status); process.exit(1); }
-  xml = await res.text();
+// 更新情報は、たまに一時的に取れないことがあるので、何回か・別の入口からも試す
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
+const URLS = [FEED_URL, `https://www.youtube.com/feeds/videos.xml?playlist_id=${CHANNEL_ID.replace(/^UC/, 'UU')}`];
+async function getFeed() {
+  if (process.env.FEED_FILE) return fs.readFileSync(process.env.FEED_FILE, 'utf8');   // 試験用
+  for (let round = 1; round <= 3; round++) {
+    for (const u of URLS) {
+      try {
+        const res = await fetch(u, { headers: { 'User-Agent': UA, 'Accept': 'application/atom+xml, application/xml;q=0.9, */*;q=0.8', 'Accept-Language': 'ja,en;q=0.8' } });
+        if (res.ok) {
+          const t = await res.text();
+          if (t.includes('<entry>')) return t;
+          console.log('中身が空でした: ' + u);
+        } else {
+          console.log(`取れませんでした(HTTP ${res.status}): ${u}`);
+        }
+      } catch (e) {
+        console.log(`取れませんでした(${e.message}): ${u}`);
+      }
+    }
+    if (round < 3) { console.log(`${15 * round}秒待って、もう一度試します…`); await new Promise((r) => setTimeout(r, 15000 * round)); }
+  }
+  return null;
+}
+const xml = await getFeed();
+if (xml === null) {
+  // 一時的な不調のことが多いので、失敗にはしない(次の自動実行で、また試します)
+  console.log('::warning::今回は、YouTubeの更新情報を取れませんでした。次の自動実行で、もう一度試します。');
+  process.exit(0);
 }
 
 const decode = (s) => s
