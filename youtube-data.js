@@ -10,6 +10,12 @@ const youtubeChannel = "https://www.youtube.com/@n_kento_official/videos";
 
 const youtubeData = [
   {
+    "date": "2026/10/26",
+    "title": "「最初はキュン！」KENTO with SB19 🌟#SB19 #SUMMERSONIC #中島健人 #最初はキュン",
+    "comment": "",
+    "url": "https://www.youtube.com/watch?v=Zp8n6oNTz-I"
+  },
+  {
     "date": "2026/10/14",
     "title": "【#中島健人】📢 ASIA TOURソウル公演 見逃し配信は10/16(金)まで‼️ 初披露した #Frequency を一部お届け🖤",
     "comment": "ASIA密着ドキュメントも絶賛配信中🎥\nhttps://hulu.jp/static/idol1st-kenty-asia-tour-2026/streaming/index.html\n\n#中島健人\n#KentoNakajima",
