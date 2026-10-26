@@ -18,6 +18,14 @@ const instagramData = {
         {
           "type": "image",
           "src": "images/story/20261024-2.jpg"
+        },
+        {
+          "type": "image",
+          "src": "images/story/20261024-3.jpg"
+        },
+        {
+          "type": "image",
+          "src": "images/story/20261024-4.jpg"
         }
       ]
     },
