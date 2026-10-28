@@ -10,6 +10,12 @@ const youtubeChannel = "https://www.youtube.com/@n_kento_official/videos";
 
 const youtubeData = [
   {
+    "date": "2026/10/27",
+    "title": "#中島健人 4th Single「超☆HENSHIN」2026.12.16 (Wed) Release!! #超HENSHIN",
+    "comment": "",
+    "url": "https://www.youtube.com/watch?v=QxfMPqkPIH0"
+  },
+  {
     "date": "2026/10/26",
     "title": "「最初はキュン！」KENTO with SB19 🌟#SB19 #SUMMERSONIC #中島健人 #最初はキュン",
     "comment": "",

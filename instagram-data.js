@@ -9,6 +9,27 @@ const instagramAccount = "https://www.instagram.com/kento.nakajima_313/";   // â
 const instagramData = {
   "stories": [
     {
+      "date": "2026/10/26",
+      "media": [
+        {
+          "type": "video",
+          "src": "images/story/20261026-1.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261026-2.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261026-3.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261026-4.mp4"
+        }
+      ]
+    },
+    {
       "date": "2026/10/24",
       "media": [
         {
