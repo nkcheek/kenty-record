@@ -10,6 +10,12 @@ const youtubeChannel = "https://www.youtube.com/@n_kento_official/videos";
 
 const youtubeData = [
   {
+    "date": "2026/10/29",
+    "title": "耳を澄ましてソウルの脈動を聞いてみた",
+    "comment": "撮影協力：韓国観光公社\nhttps://japanese.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=654&vcontsId=1591332\n\n\n台北、バンコク、そしてソウルへ。\nアジアツアーの最終日。\n\nU:nity のみんな、本当にありがとう\n\n------------------------------------\n\n■4thシングル「超☆HENSHIN」\n発売日：2026年12月1日(水)\nhttps://kentonakajima.lnk.to/CHO_HENSHIN_PKG\n\n■中島健人 Live Blu-ray & DVD\n『\"IDOL1ST 中島健人\" LIVE TOUR 2026 』\n発売日：2027年1月20日(水)\nhttps://kentonakajima.lnk.to/IDOL1ST_KentoNakajima_LIVETOUR2026_PKG\n\n------------------------------------\n\n【中島健人公式HP】\nhttps://www.nakajimakento.com/\n【中島健人公式Instagram】https://www.instagram.com/kento.nakajima_313\n【中島健人公式X】https://x.com/KENTO_Team_N\n【中島健人 Official YouTube】　https://www.youtube.com/@n_kento_official\n【中島健人公式TikTok】　https://www.tiktok.com/@kento_nakajima313",
+    "url": "https://www.youtube.com/watch?v=ahnzkY-aYsk"
+  },
+  {
     "date": "2026/10/27",
     "title": "#中島健人 4th Single「超☆HENSHIN」2026.12.16 (Wed) Release!! #超HENSHIN",
     "comment": "",
