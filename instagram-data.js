@@ -9,6 +9,53 @@ const instagramAccount = "https://www.instagram.com/kento.nakajima_313/";   // â
 const instagramData = {
   "stories": [
     {
+      "date": "2026/11/11",
+      "media": [
+        {
+          "type": "image",
+          "src": "images/story/20261111-1.jpg"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261111-2.mp4"
+        }
+      ]
+    },
+    {
+      "date": "2026/11/10",
+      "media": [
+        {
+          "type": "image",
+          "src": "images/story/20261110-1.jpg"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261110-2.mp4"
+        }
+      ]
+    },
+    {
+      "date": "2026/10/30",
+      "media": [
+        {
+          "type": "video",
+          "src": "images/story/20261030-1.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261030-2.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261030-3.mp4"
+        },
+        {
+          "type": "video",
+          "src": "images/story/20261030-4.mp4"
+        }
+      ]
+    },
+    {
       "date": "2026/10/28",
       "media": [
         {
