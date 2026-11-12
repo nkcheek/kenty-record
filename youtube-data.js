@@ -10,6 +10,12 @@ const youtubeChannel = "https://www.youtube.com/@n_kento_official/videos";
 
 const youtubeData = [
   {
+    "date": "2026/11/12",
+    "title": "中島健人「超☆HENSHIN」Music Video",
+    "comment": "中島健人4thシングル「超☆HENSHIN」のMusic Videoを公開˚₊·—̳͟͞❤️‍🔥⟢\n\nケンティーが愛のヒーローに超変身！\n無限大のアイドルパワーで、明日を生きる元気と勇気を届けます！\n愛と勇気で宇宙を照らす、予測不能のハイテンション・ポップチューン、ぜひお楽しみに！\n\n■最新曲「超☆HENSHIN」配信\nKentoNakajima.lnk.to/CHOUHENSHIN\n\n■4thシングル「超☆HENSHIN」\n発売日：2026年12月16日(水)\nhttps://kentonakajima.lnk.to/CHO_HENSHIN_PKG\n\nLyrics：Nana Moroboshi (SUPA LOVE) / Kento Nakajima\nMusic：Nana Moroboshi (SUPA LOVE)\nArrangement：Nana Moroboshi (SUPA LOVE) / Takuma Sogi (SUPA LOVE) / Takuya Watanabe\n\nChoreographer : Macoto(RHT.)\nChoreographer Management : NEiGHBOR FLOW\nDancer : KOSEI/RYOSUKE/Ryona/YURIA\n\nDirector : Yichuan Wang (maxila)\n\nDirector of Photography : Kohta Kimura\n1st Camera Assistant : Ikeo Rintaro\n2nd Camera Assistant : Kitada Shi\nGrip：Naoki Tanigawa / Yuto Tamura / Haruna Eto\nLighting Director : Sota Sugiyama\nLighting Assistant : …",
+    "url": "https://www.youtube.com/watch?v=7qiOPfB_kCM"
+  },
+  {
     "date": "2026/11/01",
     "title": "#中島健人 4th Single「超☆HENSHIN」 11.13(Fri)先行配信決定!!収録内容も公開!!#超HENSHIN",
     "comment": "",
