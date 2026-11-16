@@ -10,6 +10,30 @@ const youtubeChannel = "https://www.youtube.com/@n_kento_official/videos";
 
 const youtubeData = [
   {
+    "date": "2026/11/16",
+    "title": "#中島健人 4thシングル「超☆HENSHIN」超☆ケンティー降臨編（15秒 Ver）",
+    "comment": "",
+    "url": "https://www.youtube.com/watch?v=gBeazGrjwSg"
+  },
+  {
+    "date": "2026/11/16",
+    "title": "中島健人4thシングル「超☆HENSHIN」超☆ケンティー降臨編（15秒 Ver）",
+    "comment": "中島健人4thシングル「超☆HENSHIN」超☆ケンティー降臨編（15秒 Ver）を公開！\n\n■最新曲「超☆HENSHIN」配信\nhttps://kentonakajima.lnk.to/CHOUHENSHIN\n\n■「超☆HENSHIN」Music Video\nhttps://youtu.be/7qiOPfB_kCM\n\n■4thシングル「超☆HENSHIN」\n発売日：2026年12月16日(水)\nhttps://kentonakajima.lnk.to/CHO_HENSHIN_PKG\n\nケンティーが愛のヒーローに超変身！\n無限大のアイドルパワーで、明日を生きる元気と勇気を届けます！\n愛と勇気で宇宙を照らす、予測不能のハイテンション・ポップチューン、ぜひお楽しみに！\n\n【商品概要】\n■初回限定盤A［BD／DVD］\n価格：￥2,750(tax in)\n品番：SECN52-53/54-55\n\n- Track List –\n1. 超☆HENSHIN\n（作詞：Nana Moroboshi (SUPA LOVE) / Kento Nakajima 作曲：Nana Moroboshi (SUPA LOVE) 編曲：Nana Moroboshi (SUPA LOVE) / Takuma Sogi (SUPA LOVE) / Takuya Watanabe\n2. クリスマスChu\n（作詞・作曲：Kento Nakajima 編曲：Nobuhiro Tahara）\n3. 逆恍\n（作詞 ・作曲：Sean Oshima 編曲：Takuya Watanabe）\n \n- BD／DVD -\n・「超☆HENSHIN」MUSIC VIDEO\n・「超☆HENSHIN」MUSIC VIDEO MAKING SCENE\n※BDとDVDの内容は同一となります。\n \n- 封入特典物 –\n・Photo Book 32P…",
+    "url": "https://www.youtube.com/watch?v=kmSBUuD90FE"
+  },
+  {
+    "date": "2026/11/16",
+    "title": "中島健人4thシングル「超☆HENSHIN」超☆ケンティー降臨編（30秒 Ver）",
+    "comment": "中島健人4thシングル「超☆HENSHIN」超☆ケンティー降臨編（30秒 Ver）を公開！\n\n■最新曲「超☆HENSHIN」配信\nhttps://kentonakajima.lnk.to/CHOUHENSHIN\n\n■「超☆HENSHIN」Music Video\nhttps://youtu.be/7qiOPfB_kCM\n\n■4thシングル「超☆HENSHIN」\n発売日：2026年12月16日(水)\nhttps://kentonakajima.lnk.to/CHO_HENSHIN_PKG\n\nケンティーが愛のヒーローに超変身！\n無限大のアイドルパワーで、明日を生きる元気と勇気を届けます！\n愛と勇気で宇宙を照らす、予測不能のハイテンション・ポップチューン、ぜひお楽しみに！\n\n【商品概要】\n■初回限定盤A［BD／DVD］\n価格：￥2,750(tax in)\n品番：SECN52-53/54-55\n\n- Track List –\n1. 超☆HENSHIN\n（作詞：Nana Moroboshi (SUPA LOVE) / Kento Nakajima 作曲：Nana Moroboshi (SUPA LOVE) 編曲：Nana Moroboshi (SUPA LOVE) / Takuma Sogi (SUPA LOVE) / Takuya Watanabe\n2. クリスマスChu\n（作詞・作曲：Kento Nakajima 編曲：Nobuhiro Tahara）\n3. 逆恍\n（作詞 ・作曲：Sean Oshima 編曲：Takuya Watanabe）\n \n- BD／DVD -\n・「超☆HENSHIN」MUSIC VIDEO\n・「超☆HENSHIN」MUSIC VIDEO MAKING SCENE\n※BDとDVDの内容は同一となります。\n \n- 封入特典物 –\n・Photo Book 32P…",
+    "url": "https://www.youtube.com/watch?v=uvIqqMiLa4U"
+  },
+  {
+    "date": "2026/11/16",
+    "title": "#中島健人 4thシングル「超☆HENSHIN」超☆ケンティー降臨編（30秒 Ver）",
+    "comment": "",
+    "url": "https://www.youtube.com/watch?v=omxKbtlQW20"
+  },
+  {
     "date": "2026/11/13",
     "title": "4thシングル表題曲「超☆HENSHIN」Music Video公開中˚₊·—̳͟͞❤️‍🔥⟢🪐",
     "comment": "",
