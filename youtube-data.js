@@ -13,6 +13,12 @@ const youtubeData = [
     "date": "2026/11/22",
     "title": "#中島健人 最新曲「超⭐HENSHIN」MV公開中⭐ぜひご覧ください˚₊·—̳͟͞͞❤️‍🔥⟢🪐 #超HENSHIN",
     "comment": "",
+    "url": "https://www.youtube.com/watch?v=uKvF-bg_LeI"
+  },
+  {
+    "date": "2026/11/22",
+    "title": "#中島健人 最新曲「超⭐HENSHIN」MV公開中⭐ぜひご覧ください˚₊·—̳͟͞͞❤️‍🔥⟢🪐 #超HENSHIN",
+    "comment": "",
     "url": "https://www.youtube.com/watch?v=HTz-bRecdQU"
   },
   {
