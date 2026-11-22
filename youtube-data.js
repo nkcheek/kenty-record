@@ -10,6 +10,12 @@ const youtubeChannel = "https://www.youtube.com/@n_kento_official/videos";
 
 const youtubeData = [
   {
+    "date": "2026/11/22",
+    "title": "#中島健人 最新曲「超⭐HENSHIN」MV公開中⭐ぜひご覧ください˚₊·—̳͟͞͞❤️‍🔥⟢🪐 #超HENSHIN",
+    "comment": "",
+    "url": "https://www.youtube.com/watch?v=HTz-bRecdQU"
+  },
+  {
     "date": "2026/11/21",
     "title": "#中島健人 最新曲「超⭐HENSHIN」MV公開中⭐ぜひご覧ください˚₊·—̳͟͞͞❤️‍🔥⟢🪐 #超HENSHIN",
     "comment": "",
