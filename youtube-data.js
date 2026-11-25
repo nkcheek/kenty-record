@@ -10,6 +10,12 @@ const youtubeChannel = "https://www.youtube.com/@n_kento_official/videos";
 
 const youtubeData = [
   {
+    "date": "2026/11/25",
+    "title": "ヒーローケンティー(アイドライダー星)のお仕事setlog☆ #中島健人 #超HENSHIN",
+    "comment": "",
+    "url": "https://www.youtube.com/watch?v=5iZwzVOv2v4"
+  },
+  {
     "date": "2026/11/22",
     "title": "#中島健人 最新曲「超⭐HENSHIN」MV公開中⭐ぜひご覧ください˚₊·—̳͟͞͞❤️‍🔥⟢🪐 #超HENSHIN",
     "comment": "",
